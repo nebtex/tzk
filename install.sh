@@ -91,5 +91,4 @@ logs = docker logs tzk
 
 Enjoy !!!
 
-`docker logs tzk`
 "
