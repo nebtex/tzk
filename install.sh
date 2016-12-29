@@ -16,7 +16,7 @@ else
     curl -sSL https://get.docker.com/ | sh
 fi
 
-apt-get update -y && apt-get install curl wget -y 
+apt-get update -y && apt-get install curl wget apt-transport-https -y 
 # install sigil
 curl -fsSL https://github.com/gliderlabs/sigil/releases/download/v0.4.0/sigil_0.4.0_Linux_x86_64.tgz | tar -zxC /usr/local/bin
 
@@ -31,7 +31,7 @@ if [ "${master:-false}" == "true" ];then
     docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
     --env master=true --net=host --device=/dev/net/tun --cap-add NET_ADMIN \
     --volume /consul:/consul --volume /caddy:/root/.caddy \
-    --volume /etc/hosts:/etc/hosts--name tzk tzk
+    --volume /etc/hosts:/etc/hosts --name tzk tzk
 else
     docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
     --net=host --device=/dev/net/tun --volume /etc/hosts:/etc/hosts --cap-add NET_ADMIN \
