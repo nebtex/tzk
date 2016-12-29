@@ -1,4 +1,4 @@
---#!/usr/bin/env bash
+#!/usr/bin/env bash
 
 if echo "${VPNName:-tzk}" | grep -Eq  ^[a-z0-9]+$; then
     echo "${VPNName:-tzk} [VPNName matched]"
