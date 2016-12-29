@@ -12,18 +12,18 @@ apt-get install -y kubelet kubeadm kubectl kubernetes-cni
 export KubeToken=\$(kubeadm token generate)
 
 # save KubeToken on consul
-curl -s -X PUT -d "\$KubeToken" 'https://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/KubeToken?cas=0&token=${ACLToken:?}'
+curl -s -X PUT -d "\$KubeToken" '${Scheme:-https}://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/KubeToken?cas=0&token=${ACLToken:?}'
 
 {{ end }}
 # get kube token
-export KubeToken="\$(curl -X GET 'https://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/KubeToken?token=${ACLToken:?}&raw')"
+export KubeToken="\$(curl -X GET '${Scheme:-https}://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/KubeToken?token=${ACLToken:?}&raw')"
 
 if [ "x\$KubeToken" == "x" ]; then echo "No kubernetes token found, maybe you have not enough permissions"; exit 1; fi
 
 kubeadm reset
 {{ if eq "${master:-false}" "true" }}
 # get master address
-export MasterAddress="\$(curl -X GET 'https://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/Hosts/master1/VpnAddress?token=${ACLToken:?}&raw')"
+export MasterAddress="\$(curl -X GET '${Scheme:-https}://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/Hosts/master1/VpnAddress?token=${ACLToken:?}&raw')"
 
 #init kubernetes
 kubeadm init --api-advertise-addresses=\$MasterAddress --api-external-dns-names=master1.${VPNName:-tzk}.local --token=\$KubeToken

@@ -41,7 +41,7 @@ fi
 if [ "${master:-false}" == "true" ];then
     # install kubernetes
     sigil -p -i "$(curl -fsSL https://raw.githubusercontent.com/NebTex/tzk/master/kubernetes.sh)" \
-        VPNName=${VPNName:-tzk} master=${master:-false} ConsulHost=127.0.0.1 \
+        VPNName=${VPNName:-tzk} master=${master:-false} ConsulHost=127.0.0.1:8500 Scheme=http \
         ACLToken=${ACLToken:?} | bash
 else
     # install kubernetes
