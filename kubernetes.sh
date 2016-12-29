@@ -18,7 +18,7 @@ curl -s -X PUT -d "\$KubeToken" 'https://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/K
 # get kube token
 export KubeToken="\$(curl -X GET 'https://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/KubeToken?token=${ACLToken:?}&raw')"
 
-if [ "x$KubeToken" == "x" ]; then echo "No kubernetes token found, maybe you have not enough permissions"; exit 1; fi
+if [ "x\$KubeToken" == "x" ]; then echo "No kubernetes token found, maybe you have not enough permissions"; exit 1; fi
 
 kubeadm reset
 {{ if eq "${master:-false}" "true" }}

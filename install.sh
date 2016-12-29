@@ -38,10 +38,17 @@ else
     --name tzk tzk
 fi
 
-# install kubernetes
-sigil -p -i "$(curl -fsSL https://raw.githubusercontent.com/NebTex/tzk/master/kubernetes.sh)" \
-    VPNName=${VPNName:-tzk} master=${master:-false} ConsulHost=${ConsulHost:?} \
-    ACLToken=${ACLToken:?} | bash
+if [ "${master:-false}" == "true" ];then
+    # install kubernetes
+    sigil -p -i "$(curl -fsSL https://raw.githubusercontent.com/NebTex/tzk/master/kubernetes.sh)" \
+        VPNName=${VPNName:-tzk} master=${master:-false} ConsulHost=127.0.0.1 \
+        ACLToken=${ACLToken:?} | bash
+else
+    # install kubernetes
+    sigil -p -i "$(curl -fsSL https://raw.githubusercontent.com/NebTex/tzk/master/kubernetes.sh)" \
+        VPNName=${VPNName:-tzk} master=${master:-false} ConsulHost=${ConsulHost:?} \
+        ACLToken=${ACLToken:?} | bash
+fi
 
 # print welcome
 sleep 10
