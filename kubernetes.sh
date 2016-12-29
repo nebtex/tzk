@@ -1,16 +1,11 @@
 #!/usr/bin/env bash
 
-# get kube token
-export KubeToken="\$(curl -X GET 'https://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/KubeToken?token=${ACLToken:?}&raw')"
-
-if [ "x$KubeToken" == "x" ]; then echo "No kubernetes token found, maybe you have not enough permissions"; exit 1; fi
-
 # install kubernetes
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
+
 apt-get update -y
 apt-get install -y kubelet kubeadm kubectl kubernetes-cni
-
 
 {{ if eq "${master:-false}" "true" }}
 # setup kubernetes token
@@ -20,6 +15,10 @@ export KubeToken=\$(kubeadm token generate)
 curl -s -X PUT -d "\$KubeToken" 'https://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/KubeToken?cas=0&token=${ACLToken:?}'
 
 {{ end }}
+# get kube token
+export KubeToken="\$(curl -X GET 'https://${ConsulHost:?}/v1/kv/${VPNName:-tzk}/KubeToken?token=${ACLToken:?}&raw')"
+
+if [ "x$KubeToken" == "x" ]; then echo "No kubernetes token found, maybe you have not enough permissions"; exit 1; fi
 
 kubeadm reset
 {{ if eq "${master:-false}" "true" }}
