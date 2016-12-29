@@ -31,11 +31,11 @@ if [ "${master:-false}" == "true" ];then
     docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
     --env master=true --net=host --device=/dev/net/tun --cap-add NET_ADMIN \
     --volume /consul:/consul --volume /caddy:/root/.caddy \
-    --volume /etc/hosts:/etc/hosts --name tzk tzk
+    --volume /etc/hosts:/etc/hosts --name tzk nebtex/tzk
 else
     docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
     --net=host --device=/dev/net/tun --volume /etc/hosts:/etc/hosts --cap-add NET_ADMIN \
-    --name tzk tzk
+    --name tzk nebtex/tzk
 fi
 
 if [ "${master:-false}" == "true" ];then
