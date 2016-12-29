@@ -10,7 +10,6 @@ command_exists() {
 	command -v "$@" > /dev/null 2>&1
 }
 
-
 if command_exists docker;then
     echo "Docker is installed already"
 else
@@ -31,10 +30,12 @@ if [ "${master:-false}" == "true" ];then
     
     docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
     --env master=true --net=host --device=/dev/net/tun --cap-add NET_ADMIN \
-    --volume /consul:/consul --volume /caddy:/root/.caddy  --name tzk tzk
+    --volume /consul:/consul --volume /caddy:/root/.caddy \
+    --volume /etc/hosts:/etc/hosts--name tzk tzk
 else
-   docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
-   --net=host --device=/dev/net/tun --cap-add NET_ADMIN  --name tzk tzk
+    docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
+    --net=host --device=/dev/net/tun --volume /etc/hosts:/etc/hosts --cap-add NET_ADMIN \
+    --name tzk tzk
 fi
 
 # install kubernetes
