@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+--#!/usr/bin/env bash
 
 if echo "${VPNName:-tzk}" | grep -Eq  ^[a-z0-9]+$; then
     echo "${VPNName:-tzk} [VPNName matched]"
@@ -10,12 +10,16 @@ command_exists() {
 	command -v "$@" > /dev/null 2>&1
 }
 
+
 if command_exists docker;then
     echo "Docker is installed already"
 else
     curl -sSL https://get.docker.com/ | sh
 fi
 
+apt-get update -y && apt-get install curl wget -y 
+# install sigil
+curl -fsSL https://github.com/gliderlabs/sigil/releases/download/v0.4.0/sigil_0.4.0_Linux_x86_64.tgz | tar -zxC /usr/local/bin
 
 if [ "${master:-false}" == "true" ];then
     hostnamectl set-hostname master1
