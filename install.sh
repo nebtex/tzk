@@ -25,11 +25,11 @@ if [ "${master:-false}" == "true" ];then
     chmod 755 -R /consul
     chmod 755 -R /caddy
     
-    docker run --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
+    docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
     --env master=true --net=host --device=/dev/net/tun --cap-add NET_ADMIN \
     --volume /consul:/consul --volume /caddy:/root/.caddy  --name tzk tzk
 else
-   docker run --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
+   docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
    --net=host --device=/dev/net/tun --cap-add NET_ADMIN  --name tzk tzk
 fi
 
