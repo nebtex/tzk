@@ -38,6 +38,9 @@ else
     --name tzk nebtex/tzk
 fi
 
+# print welcome
+sleep 20
+
 if [ "${master:-false}" == "true" ];then
     # install kubernetes
     sigil -p -i "$(curl -fsSL https://raw.githubusercontent.com/NebTex/tzk/master/kubernetes.sh)" \
@@ -50,8 +53,6 @@ else
         ACLToken=${ACLToken:?} | bash
 fi
 
-# print welcome
-sleep 10
 
 # create
 BLUE='\e[34m'
