@@ -73,7 +73,7 @@ hostname = `hostname -s`.${VPNName:-tzk}.local
 ip = `tzkd get ip`
 podSubnet = `tzkd get podSubnet`
 master = master1.${VPNName:-tzk}.local
-logs = tzkd get logg
+logs = tzkd get logs
 
 Enjoy !!!
 
