@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+TZKD_VERSION=0.2.0
 
 if echo "${VPNName:-tzk}" | grep -Eq  ^[a-z0-9]+$; then
     echo "${VPNName:-tzk} [VPNName matched]"
