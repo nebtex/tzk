@@ -32,7 +32,7 @@ if [ "${master:-false}" == "true" ];then
     mkdit -p /caddy
     chmod 755 -R /consul
     chmod 755 -R /caddy
- fi
+fi
  
  sigil -p -i "$(cat /templates/tzk.toml)" \
     VPNName=${VPNName:-tzk} ACLToken=${ACLToken:?} master=${master:-false} \
