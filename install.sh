@@ -21,22 +21,18 @@ apt-get update -y && apt-get install curl wget apt-transport-https -y
 curl -fsSL https://github.com/gliderlabs/sigil/releases/download/v0.4.0/sigil_0.4.0_Linux_x86_64.tgz | tar -zxC /usr/local/bin
 
 if [ "${master:-false}" == "true" ];then
-    hostnamectl set-hostname master1
     export ACLToken=$(uuidgen)
     mkdir -p /consul
     mkdit -p /caddy
     chmod 755 -R /consul
     chmod 755 -R /caddy
-    
-    docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
-    --env master=true --net=host --device=/dev/net/tun --cap-add NET_ADMIN \
-    --volume /consul:/consul --volume /caddy:/root/.caddy \
-    --volume /etc/hosts:/etc/hosts --name tzk nebtex/tzk
-else
-    docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
-    --net=host --device=/dev/net/tun --volume /etc/hosts:/etc/hosts --cap-add NET_ADMIN \
-    --name tzk nebtex/tzk
 fi
+
+docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
+    --env master=${master:-false} --net=host --device=/dev/net/tun --cap-add NET_ADMIN \
+    --volume /consul-tinc:/consul --volume /etc/tinc/tzk:/etc/tinc/tzk --volume /etc/tzk.d/:/etc/tzk.d/
+    --volume /caddy:/root/.caddy \
+    --volume /etc/hosts:/etc/hosts --name tzk nebtex/tzk
 
 # print welcome
 sleep 5
@@ -74,8 +70,10 @@ $NC
 
 vpn = ${VPNName:-tzk}
 hostname = `hostname -s`.${VPNName:-tzk}.local
+ip = `tzkd get ip`
+podSubnet = `tzkd get podSubnet`
 master = master1.${VPNName:-tzk}.local
-logs = docker logs tzk
+logs = tzkd get logg
 
 Enjoy !!!
 
