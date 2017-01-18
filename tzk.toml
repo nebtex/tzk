@@ -1,0 +1,19 @@
+[Vpn]
+Name = "${VPNName:-tzk}"
+PublicKeyFile = "/etc/tinc/${VPNName:-tzk}/ed25519_key.pub"
+ExecStop = "/usr/sbin/tinc --pidfile=/etc/tinc/${VPNName:-tzk}/pid stop"
+ExecStart = "/usr/sbin/tincd -n ${VPNName:-tzk} --pidfile=/etc/tinc/${VPNName:-tzk}/pid --logfile=/etc/tinc/${VPNName:-tzk}/tinc.logs"
+Subnet = "${Subnet:-10.187.0.0/16}"
+NodeIP = "${NodeIP:-}"
+
+ClusterCIDR = "10.32.0.0/12"
+# pick a PodSubnet in each host if you want to pick them manually in other
+PodSubnet = "${PodSubnet:-}"
+
+[Consul]
+{{ if eq "${master:-false}" "true" }}
+Address = "127.0.0.1:8500"
+Scheme = "http"{{ else }}
+Address = "${ConsulHost:?}"
+Scheme = "https"{{ end }}
+Token = "${ACLToken:?}"
