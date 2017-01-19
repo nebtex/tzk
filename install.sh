@@ -56,11 +56,17 @@ fi
     
 if [ "${master:-false}" != "true" ];then
   # set docker new subnet
-  curl -sS https://gist.githubusercontent.com/kamermans/94b1c41086de0204750b/raw/configure_docker0.sh | sudo bash -s - `tzkd get subnet`    
+  curl -sS https://raw.githubusercontent.com/NebTex/tzk/master/configure_docker0.sh | sudo bash -s - `tzkd get podSubnet`    
 fi
 
-docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
-    --env master=${master:-false} --net=host --device=/dev/net/tun --cap-add NET_ADMIN \
+docker run -d \
+    --env ACLToken=${ACLToken:?} \
+    --env ConsulHost=${ConsulHost:?} \
+    --env master=${master:-false} \
+    --net=host \
+    --restart=always
+    --device=/dev/net/tun \
+    --cap-add NET_ADMIN \
     --volume /consul-tinc:/consul \
     --volume /etc/tinc/tzk:/etc/tinc/tzk \
     --volume /etc/tzk.d/:/etc/tzk.d/ \
