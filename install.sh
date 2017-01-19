@@ -64,7 +64,7 @@ docker run -d \
     --env ConsulHost=${ConsulHost:?} \
     --env master=${master:-false} \
     --net=host \
-    --restart=always
+    --restart=always \
     --device=/dev/net/tun \
     --cap-add NET_ADMIN \
     --volume /consul-tinc:/consul \
