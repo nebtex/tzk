@@ -27,12 +27,21 @@ curl -o /tmp/tzk.toml https://raw.githubusercontent.com/NebTex/tzk/master/kubern
 RUN wget https://github.com/NebTex/tzk-daemon/releases/download/v${TZKD_VERSION}/tzkd_linux_amd64 && \
     mv tzkd_linux_amd64 /usr/local/bin/tzkd && \
     chmod +x /usr/local/bin/tzkd && \
+# install sigil
+curl -fsSL https://github.com/gliderlabs/sigil/releases/download/v0.4.0/sigil_0.4.0_Linux_x86_64.tgz | tar -zxC /usr/local/bin
+
+curl -o /tmp/tzk.toml https://raw.githubusercontent.com/NebTex/tzk/master/tzk.toml
+
+# install tzk daemon
+wget https://github.com/NebTex/tzk-daemon/releases/download/v${TZKD_VERSION}/tzkd_linux_amd64 && \
+    mv tzkd_linux_amd64 /usr/local/bin/tzkd && \
+    chmod +x /usr/local/bin/tzkd && \
     mkdir -p /etc/tzk.d
        
 if [ "${master:-false}" == "true" ];then
     export ACLToken=$(uuidgen)
     mkdir -p /consul
-    mkdit -p /caddy
+    mkdir -p /caddy
     chmod 755 -R /consul
     chmod 755 -R /caddy
 fi
@@ -51,7 +60,9 @@ fi
 
 docker run -d --env ACLToken=${ACLToken:?} --env ConsulHost=${ConsulHost:?} \
     --env master=${master:-false} --net=host --device=/dev/net/tun --cap-add NET_ADMIN \
-    --volume /consul-tinc:/consul --volume /etc/tinc/tzk:/etc/tinc/tzk --volume /etc/tzk.d/:/etc/tzk.d/
+    --volume /consul-tinc:/consul \
+    --volume /etc/tinc/tzk:/etc/tinc/tzk \
+    --volume /etc/tzk.d/:/etc/tzk.d/ \
     --volume /caddy:/root/.caddy \
     --volume /etc/hosts:/etc/hosts --name tzk nebtex/tzk
 
@@ -99,3 +110,4 @@ logs = tzkd get logs
 Enjoy !!!
 
 "
+
