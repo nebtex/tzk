@@ -50,7 +50,8 @@ fi
     VPNName=${VPNName:-tzk} ACLToken=${ACLToken:?} master=${master:-false} \
     Subnet=${Subnet:-10.187.0.0/16} ConsulHost=${ConsulHost:?} \
     NodeIP=${NodeIP:-} \
-    PodSubnet=${PodSubnet:-10.32.0.0/12}\
+    ClusterCIDR=${ClusterCIDR:-10.32.0.0/12}\
+    PodSubnet=${PodSubnet:-}\
     > /etc/tzk.d/tzk.toml
     
 if [ "${master:-false}" != "true" ];then
